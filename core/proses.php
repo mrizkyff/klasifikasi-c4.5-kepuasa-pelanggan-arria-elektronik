@@ -7,13 +7,10 @@ $result = $mysqli -> query($sql);
 $all_data = $result->fetch_all();
 
 
-// hitung jumlah setiap atribut
-$empathy = 0;
-$responsiveness = 0;
-$assurance = 0;
-$reliability = 0;
+// hitung jumlah puas tidak puas
 $puas = 0;
 $tidak_puas = 0;
+$total_data = count($all_data);
 // menghitung yang puas
 foreach ($result as $key => $value) {
     if($value['hasil'] == 'puas'){
@@ -57,10 +54,40 @@ function pemetaan_atribut($all_data,$atribut){
 }
 
 $tangible = pemetaan_atribut($result, 'tangible');
+$empathy = pemetaan_atribut($result, 'empathy');
+$responsiveness = pemetaan_atribut($result, 'responsiveness');
+$assurance = pemetaan_atribut($result, 'assurance');
+$reliability = pemetaan_atribut($result, 'reliability');
 
-print_r([
-    'puas' => $puas,
-    'tidak_puas' => $tidak_puas,
-    'tangible' => $tangible,
-    ]);
+function hitung_entropi($value1, $value2){
+    return ((-$value1/($value1+$value2))*log(($value1/($value1+$value2)),2))+((-$value2/($value1+$value2))*log(($value2/($value1+$value2)),2));
+}
+
+function hitung_gain($entropi_total, $atribut, $total_data){
+    $subgain = 0;
+
+    // menjumlahkan seluruh entropi
+    foreach ($atribut as $key => $value) {
+        if(!($value['puas'] == "0" or $value['tidak'] == "0")){
+            $subgain += hitung_entropi($value['puas'], $value['tidak'])*($value['puas']+$value['tidak'])/$total_data;
+            // print_r(['entropi-'.$key => hitung_entropi($value['puas'], $value['tidak'])*($value['puas']+$value['tidak'])/$total_data]);
+        }
+    }
+
+    // menghitung gain
+    $gain = $entropi_total - $subgain;
+    print_r(['gain' => $gain]);
+}
+$entropi_total = hitung_entropi($puas, $tidak_puas);
+hitung_gain($entropi_total,$tangible, $total_data);
+// print_r([
+//     // 'puas' => $puas,
+//     // 'tidak_puas' => $tidak_puas,
+//     'tangible' => $tangible,
+//     // 'empathy' => $empathy,
+//     // 'responsiveness' => $responsiveness,
+//     // 'assurance' => $assurance,
+//     // 'reliability' => $reliability,
+//     'entropi total' => $entropi_total,
+//     ]);
 ?>
