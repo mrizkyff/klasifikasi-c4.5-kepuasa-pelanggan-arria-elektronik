@@ -8,7 +8,6 @@ $all_data = $result->fetch_all();
 
 
 // hitung jumlah setiap atribut
-$tangible = [];
 $empathy = 0;
 $responsiveness = 0;
 $assurance = 0;
@@ -25,35 +24,39 @@ foreach ($result as $key => $value) {
     }
 }
 // menghitung yang keanggotaan tangible
-foreach ($result as $key => $value) {
-    // print_r([$value['tangible']]);
-    
-    if(!key_exists($value['tangible'], $tangible)){
-        $tangible[$value['tangible']]['total'] = 1;
-        if(!key_exists('puas', $tangible[$value['tangible']])){
-            $tangible[$value['tangible']]['puas'] = 1;
+function pemetaan_atribut($all_data,$atribut){
+    $array_data = [];
+    $kepuasan = [
+        'puas' => 0,
+        'tidak' => 0,
+        'total' => 0,
+    ];
+    foreach ($all_data as $key => $value) {
+        // print_r([$value['tangible']]);
+        if(!key_exists($value[$atribut], $array_data)){
+            $array_data[$value[$atribut]] = $kepuasan;
+            if($value['hasil'] == 'puas'){
+                $array_data[$value[$atribut]]['puas'] = 1;
+            }
+            else if($value['hasil'] == 'tidak'){
+                $array_data[$value[$atribut]]['tidak'] = 1;
+            }
+            $array_data[$value[$atribut]]['total'] = 1;
         }
-        else if(!key_exists('tidak', $tangible[$value['tangible']])){
-            $tangible[$value['tangible']]['tidak'] = 1;
+        else if(key_exists($value[$atribut], $array_data)){
+            if($value['hasil'] == 'puas'){
+                $array_data[$value[$atribut]]['puas'] += 1;
+            }
+            else if($value['hasil'] == 'tidak'){
+                $array_data[$value[$atribut]]['tidak'] += 1;
+            }
+            $array_data[$value[$atribut]]['total'] += 1;
         }
     }
-    else if(key_exists($value['tangible'], $tangible)){
-        if(!key_exists('puas', $tangible[$value['tangible']])){
-            $tangible[$value['tangible']]['puas'] = 0;
-        }
-        else if(!key_exists('tidak', $tangible[$value['tangible']])){
-            $tangible[$value['tangible']]['tidak'] = 0;
-        }
-        else if(key_exists('tidak', $tangible[$value['tangible']])){
-            $tangible[$value['tangible']]['tidak'] += 1;
-        }
-        else if(key_exists('tidak', $tangible[$value['tangible']])){
-            $tangible[$value['tangible']]['tidak'] += 1;
-        }
-        $tangible[$value['tangible']]['total'] += 1;
-    }
+    return $array_data;
 }
 
+$tangible = pemetaan_atribut($result, 'tangible');
 
 print_r([
     'puas' => $puas,
