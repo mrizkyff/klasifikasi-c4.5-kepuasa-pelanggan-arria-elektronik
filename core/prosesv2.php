@@ -9,6 +9,7 @@ $map = [];
 $split = [
     'lesser' => 0,
     'greater' => 0,
+    'total_case' => 0,
 ];
 foreach ($result as $key => $value) {
     if(!key_exists($value['tangible'], $map)){
@@ -19,24 +20,46 @@ foreach ($result as $key => $value) {
 foreach ($map as $key => $value) {
     $map[$key]['lesser'] = hitung_lesser($result, $key, 'tangible');
     $map[$key]['greater'] = hitung_greater($result, $key, 'tangible');
+    $map[$key]['total_case'] = hitung_lesser($result, $key, 'tangible')['total']+hitung_greater($result, $key, 'tangible')['total'];
 }
 function hitung_lesser($all_data, $values, $atribut){
-    $temp = 0;
+    $temp = [
+        'puas' => 0,
+        'tidak' => 0,
+        'total' => 0,
+    ];
     foreach ($all_data as $key => $value) {
-        if($value[$atribut] <= $values){
-            $temp += 1;
+        if($value[$atribut] <= $values and $value['hasil'] == 'puas'){
+            $temp['puas'] += 1;
+            $temp['total'] += 1;
+        }
+        else if($value[$atribut] <= $values and $value['hasil'] == 'tidak'){
+            $temp['tidak'] += 1;
+            $temp['total'] += 1;
         }
     }
     return $temp;
 }
 function hitung_greater($all_data, $values, $atribut){
-    $temp = 0;
+    $temp = [
+        'puas' => 0,
+        'tidak' => 0,
+        'total' => 0,
+    ];
     foreach ($all_data as $key => $value) {
-        if($value[$atribut] > $values){
-            $temp += 1;
+        if($value[$atribut] > $values and $value['hasil'] == 'puas'){
+            $temp['puas'] += 1;
+            $temp['total'] += 1;
+        }
+        else if($value[$atribut] > $values and $value['hasil'] == 'tidak'){
+            $temp['tidak'] += 1;
+            $temp['total'] += 1;
         }
     }
     return $temp;
 }
+
+
+
 print_r($map);
 ?>
