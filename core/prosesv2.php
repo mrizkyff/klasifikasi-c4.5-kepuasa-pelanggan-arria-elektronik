@@ -111,8 +111,11 @@ function hitung_entropi($value1, $value2){
     return $entropi;
 }
 
+function hitung_gain($entropi_total, $lesser, $greater, $entropi_lesser, $entropi_greater, $total_case){
+    return $entropi_total-(($lesser/$total_case*$entropi_lesser)+($greater/$total_case*$entropi_greater));
+}
 
-function hitung_gain($atribut, $puas, $tidak){
+function hitung_gain_ratio($atribut, $puas, $tidak){
     $entropi_total = hitung_entropi($puas, $tidak);
     // hitung seluruh entropi dari kelompok data
     foreach ($atribut as $key => $value) {
@@ -138,19 +141,13 @@ function hitung_gain($atribut, $puas, $tidak){
         $total_case = $value['total_case'];
         $entropi_lesser = $value['lesser']['entropi'];
         $entropi_greater = $value['greater']['entropi'];
-        $atribut[$key]['gain'] = $entropi_total-(($total_lesser/$total_case*$entropi_lesser)+($total_greater/$total_case*$entropi_greater));
+        $atribut[$key]['gain'] = hitung_gain($entropi_total, $total_lesser, $total_greater, $entropi_lesser, $entropi_greater, $total_case);
     }
 
     return $atribut;
 }
 
-function hitung_gain_ratio(){
 
-}
-
-function hitung_split_info(){
-    
-}
 
 // proses cari node
 // instansiasi atribut
@@ -161,7 +158,7 @@ $responsiveness = mapping_atribut($result, 'responsiveness');
 $assurance = mapping_atribut($result, 'assurance');
 $reliability = mapping_atribut($result, 'reliability');
 
-print_r(hitung_gain($tangible, $jml_data_puas, $jml_data_tidak));
+print_r(hitung_gain_ratio($tangible, $jml_data_puas, $jml_data_tidak));
 
 
 // print_r([
