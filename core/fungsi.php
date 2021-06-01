@@ -151,4 +151,19 @@ function hitung_gain_ratio($atribut, $puas, $tidak){
 
     return $atribut;
 }
+
+function cari_max_gain_ratio($instance){
+    $idx_max_gain_ratio = 0;
+    $max_gain_ratio = 0;
+    foreach ($instance as $key => $value) {
+        if($value['gain_ratio'] > $max_gain_ratio){
+            $max_gain_ratio = $value['gain_ratio'];
+            $idx_max_gain_ratio = $key;
+        }
+    }
+    return [
+        'idx' => $idx_max_gain_ratio,
+        'max' => $max_gain_ratio,
+    ];
+}
 ?>
