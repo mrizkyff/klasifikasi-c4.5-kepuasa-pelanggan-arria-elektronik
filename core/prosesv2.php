@@ -115,6 +115,10 @@ function hitung_gain($entropi_total, $lesser, $greater, $entropi_lesser, $entrop
     return $entropi_total-(($lesser/$total_case*$entropi_lesser)+($greater/$total_case*$entropi_greater));
 }
 
+function hitung_split_info($total_case, $total_lesser, $total_greater){
+    return ((-$total_lesser/$total_case*log($total_lesser/$total_case,2))+(-$total_greater/$total_case*log($total_greater/$total_case,2)));
+}
+
 function hitung_gain_ratio($atribut, $puas, $tidak){
     $entropi_total = hitung_entropi($puas, $tidak);
     // hitung seluruh entropi dari kelompok data
@@ -144,6 +148,19 @@ function hitung_gain_ratio($atribut, $puas, $tidak){
         $atribut[$key]['gain'] = hitung_gain($entropi_total, $total_lesser, $total_greater, $entropi_lesser, $entropi_greater, $total_case);
     }
 
+    // hitung splitinfo
+    foreach ($atribut as $key => $value) {
+        $total_lesser = $value['lesser']['total'];
+        $total_greater = $value['greater']['total'];
+        $total_case = $value['total_case'];
+        $atribut[$key]['split_info'] = hitung_split_info($total_case, $total_lesser, $total_greater);
+    }
+
+    // hitung gain ratio
+    foreach ($atribut as $key => $value) {
+        $atribut[$key]['gain_ratio'] = $atribut[$key]['gain']/$atribut[$key]['split_info'];
+    }
+
     return $atribut;
 }
 
@@ -158,8 +175,9 @@ $responsiveness = mapping_atribut($result, 'responsiveness');
 $assurance = mapping_atribut($result, 'assurance');
 $reliability = mapping_atribut($result, 'reliability');
 
-print_r(hitung_gain_ratio($tangible, $jml_data_puas, $jml_data_tidak));
-
+foreach (hitung_gain_ratio($tangible, $jml_data_puas, $jml_data_tidak) as $key => $value) {
+    print_r([$key => $value['gain_ratio']]);
+}
 
 // print_r([
 //     // 'tangible' => $tangible,
