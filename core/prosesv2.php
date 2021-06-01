@@ -5,22 +5,24 @@ $result = $mysqli -> query($sql);
 
 // untuk menampung seluruh data dari database
 // $data_fetch = $result->fetch_all();
-$map = [];
-$split = [
-    'lesser' => 0,
-    'greater' => 0,
-    'total_case' => 0,
-];
-foreach ($result as $key => $value) {
-    if(!key_exists($value['tangible'], $map)){
-        $map[$value['tangible']] = $split;
+function mapping_atribut($result,$atribut){
+    $map = [];
+    $split = [
+        'lesser' => 0,
+        'greater' => 0,
+        'total_case' => 0,
+    ];
+    foreach ($result as $key => $value) {
+        if(!key_exists($value[$atribut], $map)){
+            $map[$value[$atribut]] = $split;
+        }
     }
-}
-// $map = array_unique($map);
-foreach ($map as $key => $value) {
-    $map[$key]['lesser'] = hitung_lesser($result, $key, 'tangible');
-    $map[$key]['greater'] = hitung_greater($result, $key, 'tangible');
-    $map[$key]['total_case'] = hitung_lesser($result, $key, 'tangible')['total']+hitung_greater($result, $key, 'tangible')['total'];
+    foreach ($map as $key => $value) {
+        $map[$key]['lesser'] = hitung_lesser($result, $key, $atribut);
+        $map[$key]['greater'] = hitung_greater($result, $key, $atribut);
+        $map[$key]['total_case'] = hitung_lesser($result, $key, $atribut)['total']+hitung_greater($result, $key, $atribut)['total'];
+    }
+    return hapus_tertinggi($map);
 }
 function hitung_lesser($all_data, $values, $atribut){
     $temp = [
@@ -59,7 +61,30 @@ function hitung_greater($all_data, $values, $atribut){
     return $temp;
 }
 
+function hapus_tertinggi($instance){
+    $tmp = 0;
+    foreach ($instance as $key => $value) {
+        if($key>$tmp){
+            $tmp = $key;
+        }
+    }
+    unset($instance[$tmp]);
+    return $instance;
+}
 
 
-print_r($map);
+
+// instansiasi atribut
+$tangible = mapping_atribut($result, 'tangible');
+$empathy = mapping_atribut($result, 'empathy');
+$responsiveness = mapping_atribut($result, 'responsiveness');
+$assurance = mapping_atribut($result, 'assurance');
+$reliability = mapping_atribut($result, 'reliability');
+print_r([
+    'tangible' => $tangible,
+    // 'empathy' => $empathy,
+    // 'responsiveness' => $responsiveness,
+    // 'assurance' => $assurance,
+    // 'reliability' => $reliability,
+])
 ?>
