@@ -155,15 +155,67 @@ function hitung_gain_ratio($atribut, $puas, $tidak){
 function cari_max_gain_ratio($instance){
     $idx_max_gain_ratio = 0;
     $max_gain_ratio = 0;
+    $max_lesser_puas = 0;
+    $max_lesser_tidak = 0;
+    $max_greater_puas = 0;
+    $max_greater_tidak = 0;
+
     foreach ($instance as $key => $value) {
         if($value['gain_ratio'] > $max_gain_ratio){
             $max_gain_ratio = $value['gain_ratio'];
+            $max_lesser_puas = $value['lesser']['puas'];
+            $max_lesser_tidak = $value['lesser']['tidak'];
+            $max_greater_puas = $value['greater']['puas'];
+            $max_greater_tidak = $value['greater']['tidak'];
             $idx_max_gain_ratio = $key;
         }
     }
     return [
         'idx' => $idx_max_gain_ratio,
         'max' => $max_gain_ratio,
+        'max_lesser_puas' => $max_lesser_puas,
+        'max_lesser_tidak' => $max_lesser_tidak,
+        'max_greater_puas' => $max_greater_puas,
+        'max_greater_tidak' => $max_greater_tidak,
     ];
 }
+
+function cari_root($pre_node){
+    $max = 0;
+    $attrib = '';
+    $idx = 0;
+    $max_lesser_puas = 0;
+    $max_lesser_tidak = 0;
+    $max_greater_puas = 0;
+    $max_greater_tidak = 0;
+    foreach ($pre_node as $key => $value) {
+        if($value['max'] > $max){
+            $max = $value['max'];
+            $attrib = $key;
+            $idx = $value['idx'];
+            $max_lesser_puas = $value['max_lesser_puas'];
+            $max_lesser_tidak = $value['max_lesser_tidak'];
+            $max_greater_puas = $value['max_greater_puas'];
+            $max_greater_tidak = $value['max_greater_tidak'];
+        }
+    }
+    return [
+        $attrib => [
+            'idx' => $idx, 
+            'max' => $max,
+            'max_lesser_puas' => $max_lesser_puas,
+            'max_lesser_tidak' => $max_lesser_tidak,
+            'max_greater_puas' => $max_greater_puas,
+            'max_greater_tidak' => $max_greater_tidak,
+        ],
+    ];
+}
+
+function filter_node($pre_node, $root){
+    foreach ($root as $key => $value) {
+        unset($pre_node[$key]);
+    }
+    return $pre_node;
+}
+
 ?>
