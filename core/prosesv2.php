@@ -111,6 +111,7 @@ function hitung_entropi($value1, $value2){
     return $entropi;
 }
 
+
 function hitung_gain($atribut, $puas, $tidak){
     $entropi_total = hitung_entropi($puas, $tidak);
     // hitung seluruh entropi dari kelompok data
@@ -119,14 +120,13 @@ function hitung_gain($atribut, $puas, $tidak){
         $tidak_less = $value['lesser']['tidak'];
         $puas_great = $value['greater']['puas'];
         $tidak_great = $value['greater']['tidak'];
-        if(!($puas_less == 0 or $tidak_less == 0)){
-            $atribut[$key]['lesser']['entropi'] = hitung_entropi($puas_less, $tidak_less);
+        $atribut[$key]['lesser']['entropi'] = hitung_entropi($puas_less, $tidak_less);
+        $atribut[$key]['greater']['entropi'] = hitung_entropi($puas_great, $tidak_great);
+        if($puas_less == 0 or $tidak_less == 0){
+            $atribut[$key]['lesser']['entropi'] = 0;
         }
-        else if(!($puas_great == 0 or $tidak_great == 0)){
-            $atribut[$key]['greater']['entropi'] = hitung_entropi($puas_great, $tidak_great);
-        }
-        else{
-            
+        if($puas_great == 0 or $tidak_great == 0){
+            $atribut[$key]['greater']['entropi'] = 0;
         }
         // print_r([$key => $value]);
     }
