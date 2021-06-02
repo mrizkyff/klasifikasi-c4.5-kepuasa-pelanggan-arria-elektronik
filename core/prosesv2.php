@@ -89,53 +89,37 @@ foreach ($pre_node as $node) {
 }
 
 print_r($node_list);
-die();
 
-$root = cari_root($pre_node);
-
-// menghilangkan atribut yang terpilih pada pre node
-$pre_node = filter_node($pre_node, $root);
-
-// cari root sesuai dengan nilai gain_ratio tertinggi
-$root = beri_label_root($root);
-print_r($root);
-die();
-// timpa pre node di atas dengan mapping node baru sesuai syarat pada leaf
-// $tangible = mapping_atribut($result, 'tangible','responsiveness',3.3,'lesser');
-$pre_node = cari_data_after_root($result,$root,$pre_node);
-
-// hitung gain ratio dari seluruh kelompok data di setiap atribut
-foreach ($pre_node as $key => $value) {
-    $pre_node[$key] = hitung_gain_ratio($pre_node[$key], $jml_data_puas, $jml_data_tidak);
+$query = [
+    'tangible' => 4.5,
+    'empathy' => 4.3,
+    'responsiveness' => 3.3,
+    'assurance' => 5,
+    'reliability' => 5,
+];
+print_r($query);
+$hasil = '';
+foreach ($node_list as $idx_atribut => $value_idx_atribut) {
+    foreach ($value_idx_atribut as $atribut => $value_atribut) {
+        // print_r([
+        //     'iterasiiii '.$atribut => [
+        //         $atribut.'query' => $query[$atribut],
+        //         'nilai_'.$atribut => $value_atribut['idx'],
+        //         'nilai_greater' => $value_atribut['greater'],
+        //     ]
+        // ]);
+        if($query[$atribut] > $value_atribut['idx'] and $value_atribut['greater'] != ''){
+            $hasil = $value_atribut['greater'];
+            break 2;
+        }
+        if($query[$atribut] <= $value_atribut['idx'] and $value_atribut['lesser'] != ''){
+            $hasil = $value_atribut['lesser'];
+            break 2;
+        }
+    }
 }
-
-// cari nilai gain ratio terbesar dari setiap atribut
-foreach ($pre_node as $key => $value) {
-    $pre_node[$key] = cari_max_gain_ratio($pre_node[$key]);
-}
-
-// dari seluruh gain ratio setiap atribut, dicari nilai paling maksimalnya 
-$root = cari_root($pre_node);
-$root = cari_label_root($root);
-print_r($root);
+print_r([$hasil]);
 die();
 
-// cek nilai lesser dan greaternya, mana yang sudah atau belum terlabel
 
-print_r($root);
-
-
-
-
-
-
-
-
-// print_r([
-//     'tangible' => $max_tangible,
-//     'empathy' => $max_empathy,
-//     'responsiveness' => $max_responsiveness,
-//     'assurance' => $max_assurance,
-//     'reliability' => $max_reliability,
-// ])
 ?>
