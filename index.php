@@ -118,109 +118,92 @@ $result = mysqli_query($mysqli, "SELECT * FROM kepuasan_konsumen ORDER BY id ASC
                                 <a href="#" style="float: right; padding-right: 12.5px; padding-left: 12.5px;" class="mb-2 btn btn-success"         data-bs-toggle="modal" data-bs-target="#modalTambah"> <i class="fas fa-plus    "></i> Tambah Data</a>
                             </div>
                         </div>
-                        <table class="table table-striped table-bordered mb-5" style="width:100%" id="table_dataset">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Tangible (X1)</th>
-                                    <th>Empathy (X2)</th>
-                                    <th>Responsiveness (X3)</th>
-                                    <th>Assurance (X4)</th>
-                                    <th>Reliability (X5)</th>
-                                    <th width="160px;">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php  
-                                $no = 1;
-                                while($user_data = mysqli_fetch_array($result)) {         
-                                ?>
-                                
-                                <tr>
-                                    <td class='text-center'><?=$no?></td>
-                                    <td class='text-center'><?=$user_data['tangible']?></td>
-                                    <td class='text-center'><?=$user_data['empathy']?></td>
-                                    <td class='text-center'><?=$user_data['responsiveness']?></td>
-                                    <td class='text-center'><?=$user_data['assurance']?></td>
-                                    <td class='text-center'><?=$user_data['reliability']?></td>
-                                    <td width='130px;'><button class='btn btn-sm btn-info' data-bs-toggle='modal' data-bs-target='#modalEdit<?= $user_data['id']?>'><i class="fas fa-pencil    "></i> Edit</button> | <form class='d-inline' method='POST' action='core/crud.php'> <input type='hidden' name='id_hapus' value='<?= $user_data["id"] ?>'> <button type='submit' name='Delete' value='Delete' class='btn btn-danger btn-sm'><i class="fas fa-trash    "></i> Hapus</button></form></td>
-                                    <!-- modal edit data -->
-                                    <div class="modal fade" id="modalEdit<?= $user_data['id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                        <input type="hidden" name="id_edit">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Form Tambah Data</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-striped table-bordered mb-5 table-hover" style="width:100%" id="table_dataset">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tangible (X1)</th>
+                                            <th>Empathy (X2)</th>
+                                            <th>Responsiveness (X3)</th>
+                                            <th>Assurance (X4)</th>
+                                            <th>Reliability (X5)</th>
+                                            <th>Hasil</th>
+                                            <th width="160px;">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php  
+                                        $no = 1;
+                                        while($data_konsumen = mysqli_fetch_array($result)) {         
+                                        ?>
+                                        
+                                        <tr>
+                                            <td class='text-center'><?=$no?></td>
+                                            <td class='text-center'><?=$data_konsumen['tangible']?></td>
+                                            <td class='text-center'><?=$data_konsumen['empathy']?></td>
+                                            <td class='text-center'><?=$data_konsumen['responsiveness']?></td>
+                                            <td class='text-center'><?=$data_konsumen['assurance']?></td>
+                                            <td class='text-center'><?=$data_konsumen['reliability']?></td>
+                                            <td class='text-center'><?=$data_konsumen['hasil']?></td>
+                                            <td width='130px;'><button class='btn btn-sm btn-info' data-bs-toggle='modal' data-bs-target='#modalEdit<?= $data_konsumen['id']?>'><i class="fas fa-pencil    "></i> Edit</button> | <form class='d-inline' method='POST' action='core/crud.php'> <input type='hidden' name='id_hapus' value='<?= $data_konsumen["id"] ?>'> <button type='submit' name='Delete' value='Delete' class='btn btn-danger btn-sm'><i class="fas fa-trash    "></i> Hapus</button></form></td>
+                                            <!-- modal edit data -->
+                                            <div class="modal fade" id="modalEdit<?= $data_konsumen['id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                <input type="hidden" name="id_edit">
+                                                    <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Form Tambah Data</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="core/crud.php" method="POST">
+                                                            <div class="form-group">
+                                                                <label for="tangible">Tangible</label>
+                                                                <input type="hidden" value="<?= $data_konsumen['id']?>" name="id_update">
+                                                                <input class="form-control form-control-sm" value="<?= $data_konsumen["tangible"] ?>" type="number" step="0.01" name="tangible">
+                                                            </div>  
+                                                            <div class="form-group">
+                                                                <label for="empathy">Empathy</label>
+                                                                <input class="form-control form-control-sm" value="<?= $data_konsumen["empathy"] ?>" type="number" step="0.01" name="empathy">
+                                                            </div>  
+                                                            <div class="form-group">
+                                                                <label for="responsiveness">Responsiveness</label>
+                                                                <input class="form-control form-control-sm" value="<?= $data_konsumen["responsiveness"] ?>" type="number" step="0.01" name="responsiveness">
+                                                            </div>  
+                                                            <div class="form-group">
+                                                                <label for="assurance">Assurance</label>
+                                                                <input class="form-control form-control-sm" value="<?= $data_konsumen["assurance"] ?>" type="number" step="0.01" name="assurance">
+                                                            </div>  
+                                                            <div class="form-group">
+                                                                <label for="reliability">Reliability</label>
+                                                                <input class="form-control form-control-sm" value="<?= $data_konsumen["reliability"] ?>" type="number" step="0.01" name="reliability">
+                                                            </div>  
+                                                            <select name="hasil" id="hasil" required class="form-select" value="<?= $data_konsumen["reliability"] ?>">
+                                                                <option selected>Pilih</option>
+                                                                <option value="puas">PUAS</option>
+                                                                <option value="tidak">TIDAK PUAS</option>
+                                                            </select> 
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <input type="submit" name="Update" value="Simpan" class="btn btn-success">
+                                                        </form>
+                                                    </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <!-- <div class="modal-body">
-                                                <form action="core/crud.php" method="POST">
-                                                    <div class="form-group">
-                                                        <label for="nama_desa">Nama Desa</label>
-                                                        <input type="hidden" value="<?= $user_data['id']?>" name="id_update">
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["nama_desa"] ?>" type="text" name="nama_desa">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="mental">Gangguan Mental</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["mental"] ?>" type="number" name="mental">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="imt">IMT</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["imt"] ?>" type="number" name="imt">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="tek_darah">Tekanan Darah</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["tek_darah"] ?>" type="number" name="tek_darah">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="hb_kurang">Hb Kurang</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["hb_kurang"] ?>" type="number" name="hb_kurang">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="kolesterol">Koleseterol</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["kolesterol"] ?>" type="number" name="kolesterol">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="dm">Diabetes Melitus</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["dm"] ?>" type="number" name="dm">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="as_urat">Asam Urat</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["asam_urat"] ?>" type="number" name="as_urat">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="ginjal">Gangguan Ginjal</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["ginjal"] ?>" type="number" name="ginjal">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="kognitif">Gangguan Kognitif</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["kognitif"] ?>" type="number" name="kognitif">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="pengelihatan">Gangguan Pengelihatan</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["pengelihatan"] ?>" type="number" name="pengelihatan">
-                                                    </div>  
-                                                    <div class="form-group">
-                                                        <label for="pendengaran">Gangguan Pendengaran</label>
-                                                        <input class="form-control form-control-sm" value="<?= $user_data["pendengaran"] ?>" type="number" name="pendengaran">
-                                                    </div>  
-                                            </div> -->
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <input type="submit" name="Update" value="Simpan" class="btn btn-success">
-                                                </form>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- akhir modal edit data -->
-                                </tr>
-                                <?php   
-                                    $no += 1;
-                                    }
-                                ?>
-                            </tbody>
-                        </table>
+                                            <!-- akhir modal edit data -->
+                                        </tr>
+                                        <?php   
+                                            $no += 1;
+                                            }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -240,52 +223,32 @@ $result = mysqli_query($mysqli, "SELECT * FROM kepuasan_konsumen ORDER BY id ASC
             <div class="modal-body">
                 <form action="core/crud.php" method="POST">
                     <div class="form-group">
-                        <label for="nama_desa">Nama Desa</label>
-                        <input class="form-control form-control-sm" type="text" name="nama_desa" required>
+                        <label for="tangible">Tangible *</label>
+                        <input class="form-control form-control-sm" type="number" step="0.01" name="tangible" required>
                     </div>  
                     <div class="form-group">
-                        <label for="mental">Gangguan Mental</label>
-                        <input class="form-control form-control-sm" type="number" name="mental" required>
+                        <label for="empathy">Empathy *</label>
+                        <input class="form-control form-control-sm" type="number" step="0.01" name="empathy" required>
                     </div>  
                     <div class="form-group">
-                        <label for="imt">IMT</label>
-                        <input class="form-control form-control-sm" type="number" name="imt" required>
+                        <label for="responsiveness">Responsiveness *</label>
+                        <input class="form-control form-control-sm" type="number" step="0.01" name="responsiveness" required>
                     </div>  
                     <div class="form-group">
-                        <label for="tek_darah">Tekanan Darah</label>
-                        <input class="form-control form-control-sm" type="number" name="tek_darah" required>
+                        <label for="assurance">Assurance *</label>
+                        <input class="form-control form-control-sm" type="number" step="0.01" name="assurance" required>
                     </div>  
                     <div class="form-group">
-                        <label for="hb_kurang">Hb Kurang</label>
-                        <input class="form-control form-control-sm" type="number" name="hb_kurang" required>
+                        <label for="reliability">Reliability *</label>
+                        <input class="form-control form-control-sm" type="number" step="0.01" name="reliability" required>
                     </div>  
                     <div class="form-group">
-                        <label for="kolesterol">Koleseterol</label>
-                        <input class="form-control form-control-sm" type="number" name="kolesterol" required>
-                    </div>  
-                    <div class="form-group">
-                        <label for="dm">Diabetes Melitus</label>
-                        <input class="form-control form-control-sm" type="number" name="dm" required>
-                    </div>  
-                    <div class="form-group">
-                        <label for="as_urat">Asam Urat</label>
-                        <input class="form-control form-control-sm" type="number" name="as_urat" required>
-                    </div>  
-                    <div class="form-group">
-                        <label for="ginjal">Gangguan Ginjal</label>
-                        <input class="form-control form-control-sm" type="number" name="ginjal" required>
-                    </div>  
-                    <div class="form-group">
-                        <label for="kognitif">Gangguan Kognitif</label>
-                        <input class="form-control form-control-sm" type="number" name="kognitif" required>
-                    </div>  
-                    <div class="form-group">
-                        <label for="pengelihatan">Gangguan Pengelihatan</label>
-                        <input class="form-control form-control-sm" type="number" name="pengelihatan" required>
-                    </div>  
-                    <div class="form-group">
-                        <label for="pendengaran">Gangguan Pendengaran</label>
-                        <input class="form-control form-control-sm" type="number" name="pendengaran" required>
+                        <label for="hasil">Hasil *</label>
+                        <select name="hasil" id="hasil" required class="form-select">
+                            <option selected>Pilih</option>
+                            <option value="puas">PUAS</option>
+                            <option value="tidak">TIDAK PUAS</option>
+                        </select>
                     </div>  
             </div>
             <div class="modal-footer">
@@ -297,6 +260,10 @@ $result = mysqli_query($mysqli, "SELECT * FROM kepuasan_konsumen ORDER BY id ASC
         </div>
     </div>
     <!-- akhir modal tambah data -->
+
+    <br>
+    <br>
+    <br>
 
     
 
@@ -312,7 +279,7 @@ $result = mysqli_query($mysqli, "SELECT * FROM kepuasan_konsumen ORDER BY id ASC
         console.log('haloo');
         $('#table_dataset').dataTable( {
             "columnDefs": [
-                { "orderable": false, "targets": 6 }
+                { "orderable": false, "targets": 7 }
             ]
         } );
     });

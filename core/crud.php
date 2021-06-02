@@ -2,26 +2,18 @@
 include_once("config.php");
 
         if(isset($_POST['Submit'])){
-            $nama_desa = $_POST['nama_desa'];
-            $mental = $_POST['mental'];
-            $imt = $_POST['imt'];
-            $tek_darah = $_POST['tek_darah'];
-            $hb_kurang = $_POST['hb_kurang'];
-            $kolesterol = $_POST['kolesterol'];
-            $dm = $_POST['dm'];
-            $as_urat = $_POST['as_urat'];
-            $ginjal = $_POST['ginjal'];
-            $kognitif = $_POST['kognitif'];
-            $pengelihatan = $_POST['pengelihatan'];
-            $pendengaran = $_POST['pendengaran'];
+            $tangible = $_POST['tangible'];
+            $empathy = $_POST['empathy'];
+            $responsiveness = $_POST['responsiveness'];
+            $assurance = $_POST['assurance'];
+            $reliability = $_POST['reliability'];
+            $hasil = $_POST['hasil'];
 
-            // include database connection file
-            // include_once("core/config.php");
                     
-            // Insert user data into table
-            $result = mysqli_query($mysqli, "INSERT INTO penyakit(nama_desa, mental, imt, tek_darah, hb_kurang, kolesterol, dm, asam_urat, ginjal, kognitif, pengelihatan, pendengaran) VALUES('$nama_desa','$mental','$imt','$tek_darah','$hb_kurang','$kolesterol','$dm','$as_urat','$ginjal','$kognitif','$pengelihatan','$pendengaran')");
+            // Insert data ke database
+            $result = mysqli_query($mysqli, "INSERT INTO kepuasan_konsumen(tangible, empathy, responsiveness, assurance, reliability, hasil) VALUES('$tangible','$empathy','$responsiveness','$assurance','$reliability','$hasil')");
             
-            // Show message when user added
+            // redirect setelah sukses
             if($result){
                 header("Location:../index.php");
             }
