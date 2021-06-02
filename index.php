@@ -154,7 +154,7 @@ $result = mysqli_query($mysqli, "SELECT * FROM kepuasan_konsumen ORDER BY id ASC
                                                 <input type="hidden" name="id_edit">
                                                     <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Form Tambah Data</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Form Edit Data</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
@@ -180,11 +180,13 @@ $result = mysqli_query($mysqli, "SELECT * FROM kepuasan_konsumen ORDER BY id ASC
                                                                 <label for="reliability">Reliability</label>
                                                                 <input class="form-control form-control-sm" value="<?= $data_konsumen["reliability"] ?>" type="number" step="0.01" name="reliability">
                                                             </div>  
-                                                            <select name="hasil" id="hasil" required class="form-select" value="<?= $data_konsumen["reliability"] ?>">
-                                                                <option selected>Pilih</option>
-                                                                <option value="puas">PUAS</option>
-                                                                <option value="tidak">TIDAK PUAS</option>
-                                                            </select> 
+                                                            <div class="form-group">
+                                                                <label for="hasil">Hasil</label>
+                                                                <select name="hasil" id="hasil" required class="form-select" value="<?= $data_konsumen["hasil"] ?>">
+                                                                    <option <?= $data_konsumen['hasil'] == 'puas' ? 'selected' : '' ?> value="puas">PUAS</option>
+                                                                    <option <?= $data_konsumen['hasil'] == 'tidak' ? 'selected' : '' ?> value="tidak">TIDAK PUAS</option>
+                                                                </select> 
+                                                            </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
