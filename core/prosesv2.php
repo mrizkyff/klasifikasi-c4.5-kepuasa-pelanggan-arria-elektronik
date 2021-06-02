@@ -18,11 +18,11 @@ $assurance = mapping_atribut($result, 'assurance');
 $reliability = mapping_atribut($result, 'reliability');
 
 // perhitungan gain ratio seluruh kelompok data pada setiap atribut
-$tangible = hitung_gain_ratio($tangible, $jml_data_puas, $jml_data_tidak);
-$empathy = hitung_gain_ratio($empathy, $jml_data_puas, $jml_data_tidak);
-$responsiveness = hitung_gain_ratio($responsiveness, $jml_data_puas, $jml_data_tidak);
-$assurance = hitung_gain_ratio($assurance, $jml_data_puas, $jml_data_tidak);
-$reliability = hitung_gain_ratio($reliability, $jml_data_puas, $jml_data_tidak);
+$tangible = hitung_gain_ratio($tangible);
+$empathy = hitung_gain_ratio($empathy);
+$responsiveness = hitung_gain_ratio($responsiveness);
+$assurance = hitung_gain_ratio($assurance);
+$reliability = hitung_gain_ratio($reliability);
 
 // pencarian max gain ratio
 $max_tangible = cari_max_gain_ratio($tangible);

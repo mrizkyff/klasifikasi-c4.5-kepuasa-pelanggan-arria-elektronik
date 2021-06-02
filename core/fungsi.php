@@ -187,8 +187,17 @@ function hitung_split_info($total_case, $total_lesser, $total_greater){
     return ((-$total_lesser/$total_case*log($total_lesser/$total_case,2))+(-$total_greater/$total_case*log($total_greater/$total_case,2)));
 }
 
-function hitung_gain_ratio($atribut, $puas, $tidak){
+function hitung_gain_ratio($atribut){
+    // hitung entropi total
+    $puas = 0;
+    $tidak = 0;
+    foreach ($atribut as $key => $value) {
+        $puas += $value['lesser']['puas'] + $value['greater']['puas'];
+        $tidak += $value['lesser']['tidak'] + $value['greater']['tidak'];
+    }
     $entropi_total = hitung_entropi($puas, $tidak);
+    // print_r(['debuggg ==>' => $entropi_total]);
+
     // hitung seluruh entropi dari kelompok data
     foreach ($atribut as $key => $value) {
         $puas_less = $value['lesser']['puas'];
