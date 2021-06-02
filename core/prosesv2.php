@@ -39,89 +39,88 @@ $pre_node = [
     'reliability' => $max_reliability,
 ];
 
+// untuk menampung node untuk perhitungan rules
+$node_list = [];
 
+// untuk iterasi ke-2 dst
+foreach ($pre_node as $node) {
+    
+    // mencari root dari array pre node berdasarkan nilai gain ratio terbesar
+    $root = cari_root($pre_node);
 
-// print_r($pre_node);
-// die();
+    // menghilangkan atribut yang terpilih pada pre node
+    $pre_node = filter_node($pre_node, $root);
+
+    // beri root sesuai dengan nilai gain_ratio tertinggi
+    $root = beri_label_root($root);
+
+    
+    // simpan root kedalam node list
+    array_push($node_list,$root);
+    
+    // untuk memberhentikan loop ketika data greater dan lesser sudah berlabel
+    foreach ($root as $key => $value) {
+        if($value['lesser'] != '' and $value['greater'] != ''){
+            break 2;
+        }
+    }
+
+    // timpa pre node di atas dengan mapping node baru sesuai syarat pada leaf (filtering)
+    $pre_node = cari_data_after_root($result,$root,$pre_node);
+
+    // hitung gain ratio dari seluruh kelompok data di setiap atribut
+    foreach ($pre_node as $key => $value) {
+        $pre_node[$key] = hitung_gain_ratio($pre_node[$key], $jml_data_puas, $jml_data_tidak);
+    }
+
+    // cari nilai gain ratio terbesar dari setiap atribut
+    foreach ($pre_node as $key => $value) {
+        $pre_node[$key] = cari_max_gain_ratio($pre_node[$key]);
+    }
+
+    // dari seluruh gain ratio setiap atribut, dicari nilai paling maksimalnya sebagai root
+    $root = cari_root($pre_node);
+
+    // beri root sesuai dengan nilai gain_ratio tertinggi
+    $root = beri_label_root($root);
+
+    // print_r($root);
+    // break;
+}
+
+print_r($node_list);
+die();
+
 $root = cari_root($pre_node);
 
-
+// menghilangkan atribut yang terpilih pada pre node
 $pre_node = filter_node($pre_node, $root);
+
+// cari root sesuai dengan nilai gain_ratio tertinggi
+$root = beri_label_root($root);
 print_r($root);
-foreach ($root as $key => $value) {
-    $root[$key]['lesser'] = '';
-    $root[$key]['greater'] = '';
-    $max_lesser_puas = $value['max_lesser_puas'];
-    $max_lesser_tidak = $value['max_lesser_tidak'];
-    $max_greater_puas = $value['max_greater_puas'];
-    $max_greater_tidak = $value['max_greater_tidak'];
-    if($max_lesser_puas == 0 and $max_lesser_tidak != 0){
-        $root[$key]['lesser'] = 'tidak';
-    }
-    else if($max_lesser_tidak == 0 and $max_lesser_puas != 0){
-        $root[$key]['lesser'] = 'puas';
-    }
-    if($max_greater_puas == 0 and $max_greater_tidak != 0){
-        $root[$key]['greater'] = 'tidak';
-    }
-    else if($max_greater_tidak == 0 and $max_greater_puas != 0){
-        $root[$key]['greater'] = 'puas';
-    }
-}
-// print_r($root);
-
+die();
+// timpa pre node di atas dengan mapping node baru sesuai syarat pada leaf
 // $tangible = mapping_atribut($result, 'tangible','responsiveness',3.3,'lesser');
+$pre_node = cari_data_after_root($result,$root,$pre_node);
 
-foreach ($pre_node as $key => $value) {
-    foreach ($root as $key1 => $value1) {
-        $ambang = $value1['idx'];
-        $operator = '';
-        if($value1['greater'] == "puas"){
-            $operator = "lesser";
-        }
-        else if($value1['lesser'] == "puas"){
-            $operator = "greater";
-        }
-        $pre_node[$key] = mapping_atribut($result, $key, $key1, $ambang, $operator);
-    }
-}
-
-// cari nilai terbesar dari setiap atribut
+// hitung gain ratio dari seluruh kelompok data di setiap atribut
 foreach ($pre_node as $key => $value) {
     $pre_node[$key] = hitung_gain_ratio($pre_node[$key], $jml_data_puas, $jml_data_tidak);
 }
 
-// cari nilai terbesar dari seluruh atribut
+// cari nilai gain ratio terbesar dari setiap atribut
 foreach ($pre_node as $key => $value) {
     $pre_node[$key] = cari_max_gain_ratio($pre_node[$key]);
 }
 
-// print_r($pre_node);
-
+// dari seluruh gain ratio setiap atribut, dicari nilai paling maksimalnya 
 $root = cari_root($pre_node);
+$root = cari_label_root($root);
+print_r($root);
+die();
 
-// print_r($root);
-foreach ($root as $key => $value) {
-    $root[$key]['lesser'] = '';
-    $root[$key]['greater'] = '';
-    $max_lesser_puas = $value['max_lesser_puas'];
-    $max_lesser_tidak = $value['max_lesser_tidak'];
-    $max_greater_puas = $value['max_greater_puas'];
-    $max_greater_tidak = $value['max_greater_tidak'];
-    if($max_lesser_puas == 0 and $max_lesser_tidak != 0){
-        $root[$key]['lesser'] = 'tidak';
-    }
-    else if($max_lesser_tidak == 0 and $max_lesser_puas != 0){
-        $root[$key]['lesser'] = 'puas';
-    }
-    if($max_greater_puas == 0 and $max_greater_tidak != 0){
-        $root[$key]['greater'] = 'tidak';
-    }
-    else if($max_greater_tidak == 0 and $max_greater_puas != 0){
-        $root[$key]['greater'] = 'puas';
-    }
-}
-// cek nilai lesser dan greaternya
+// cek nilai lesser dan greaternya, mana yang sudah atau belum terlabel
 
 print_r($root);
 

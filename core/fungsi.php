@@ -307,4 +307,46 @@ function filter_node($pre_node, $root){
     return $pre_node;
 }
 
+function beri_label_root($root){
+    foreach ($root as $key => $value) {
+        $root[$key]['lesser'] = '';
+        $root[$key]['greater'] = '';
+        $max_lesser_puas = $value['max_lesser_puas'];
+        $max_lesser_tidak = $value['max_lesser_tidak'];
+        $max_greater_puas = $value['max_greater_puas'];
+        $max_greater_tidak = $value['max_greater_tidak'];
+        if($max_lesser_puas == 0 and $max_lesser_tidak != 0){
+            $root[$key]['lesser'] = 'tidak';
+        }
+        else if($max_lesser_tidak == 0 and $max_lesser_puas != 0){
+            $root[$key]['lesser'] = 'puas';
+        }
+        if($max_greater_puas == 0 and $max_greater_tidak != 0){
+            $root[$key]['greater'] = 'tidak';
+        }
+        else if($max_greater_tidak == 0 and $max_greater_puas != 0){
+            $root[$key]['greater'] = 'puas';
+        }
+    }
+    return $root;
+}
+
+function cari_data_after_root($result,$root, $pre_node){
+    // filter atribut sesuai dengan leaf sebelumnya
+    foreach ($pre_node as $key => $value) {
+        foreach ($root as $key1 => $value1) {
+            $ambang = $value1['idx'];
+            $operator = '';
+            if($value1['greater'] == "puas"){
+                $operator = "lesser";
+            }
+            else if($value1['lesser'] == "puas"){
+                $operator = "greater";
+            }
+            $pre_node[$key] = mapping_atribut($result, $key, $key1, $ambang, $operator);
+        }
+    }
+    return $pre_node;
+}
+
 ?>
