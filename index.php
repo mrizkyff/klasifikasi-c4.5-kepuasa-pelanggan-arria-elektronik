@@ -58,17 +58,18 @@ $result = mysqli_query($mysqli, "SELECT * FROM kepuasan_konsumen ORDER BY id ASC
                     <div class="card-body">
                         <h5>Uji Kepuasan Konsumen</h5>
                         <table class="table table-bordered" width="100%">
+                        <form action="core/prosesv2.php" method="POST">
                             <tr>
                                 <td width="33%">
                                     <div class="form-group">
                                         <label for="tangible">Tangible *</label>
-                                        <input required class="form-control" type="number" step="0.01" name="tangible" id="tangible">
+                                        <input required placeholder="0.0" class="form-control" type="number" step="0.01" name="tangible" id="tangible">
                                     </div>
                                 </td>
                                 <td width="33%">
                                     <div class="form-group">
                                         <label for="assurance">Assurance *</label>
-                                        <input required class="form-control" type="number" step="0.01" name="assurance" id="assurance">
+                                        <input required placeholder="0.0" class="form-control" type="number" step="0.01" name="assurance" id="assurance">
                                     </div>
                                 </td>
                                 <td>
@@ -79,31 +80,44 @@ $result = mysqli_query($mysqli, "SELECT * FROM kepuasan_konsumen ORDER BY id ASC
                                 <td>
                                     <div class="form-group">
                                         <label for="empathy">Empathy *</label>
-                                        <input required class="form-control" type="number" step="0.01" name="empathy" id="empathy">
+                                        <input required placeholder="0.0" class="form-control" type="number" step="0.01" name="empathy" id="empathy">
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <label for="reliability">Reliability *</label>
-                                        <input required class="form-control" type="number" step="0.01" name="reliability" id="reliability">
+                                        <input required placeholder="0.0" class="form-control" type="number" step="0.01" name="reliability" id="reliability">
                                     </div>
                                 </td>
                                 <td>
-                                    <h2 class="text-center">PUAS</h2>
+                                    <?php 
+                                        if(isset($_GET['label'])){
+                                            if($_GET['label'] == 'puas'){
+                                                echo '<h2 class="text-center text-success">PUAS</h2>';
+                                            }
+                                            else if($_GET['label'] == 'tidak'){
+                                                echo '<h2 class="text-center text-danger">TIDAK</h2>';
+                                            }
+                                        }
+                                        else{
+                                            echo '<h2 class="text-center">HASIL</h2>';
+                                        }
+                                    ?>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <div class="form-group">
                                         <label for="responsiveness">Responsiveness *</label>
-                                        <input required class="form-control" type="number" step="0.01" name="responsiveness" id="responsiveness">
+                                        <input required placeholder="0.0" class="form-control" type="number" step="0.01" name="responsiveness" id="responsiveness">
                                     </div>
                                 </td>
                                 <td colspan="2">
-                                    <button class="mt-3 btn btn-primary" style="float:right; padding-right: 30px; padding-left: 30px;"><i class="fas fa-cogs"></i> Hitung</button>
-                                    <button type="reset" style="float:right; padding-right: 16.5px; padding-left: 16.5px; margin-right: 10px;" class="mt-3 btn btn-secondary"><i class="fas fa-undo "></i> Reset Form</button>
+                                    <button type="submit" class="mt-3 btn btn-primary" style="float:right; padding-right: 30px; padding-left: 30px;"><i class="fas fa-cogs"></i> Hitung</button>
+                                    <a href="index.php" style="float:right; padding-right: 16.5px; padding-left: 16.5px; margin-right: 10px;" class="mt-3 btn btn-secondary"><i class="fas fa-undo "></i> Reset Form</a>
                                 </td>
                             </tr>
+                            </form>
                         </table>
                     </div>
                 </div>

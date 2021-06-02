@@ -88,16 +88,21 @@ foreach ($pre_node as $node) {
     // break;
 }
 
-print_r($node_list);
+// print_r($node_list);
 
 $query = [
-    'tangible' => 4.5,
-    'empathy' => 4.3,
-    'responsiveness' => 3.3,
-    'assurance' => 5,
-    'reliability' => 5,
+    // 'tangible' => 4.5,
+    // 'empathy' => 3,
+    // 'responsiveness' => 3.3,
+    // 'assurance' => 3,
+    // 'reliability' => 3,
+    'tangible' => $_POST['tangible'],
+    'empathy' => $_POST['empathy'],
+    'responsiveness' => $_POST['responsiveness'],
+    'assurance' => $_POST['assurance'],
+    'reliability' => $_POST['reliability'],
 ];
-print_r($query);
+// print_r($query);
 $hasil = '';
 foreach ($node_list as $idx_atribut => $value_idx_atribut) {
     foreach ($value_idx_atribut as $atribut => $value_atribut) {
@@ -119,7 +124,8 @@ foreach ($node_list as $idx_atribut => $value_idx_atribut) {
     }
 }
 print_r([$hasil]);
-die();
+// die();
+header("Location:../index.php?label=$hasil");
 
 
 ?>
