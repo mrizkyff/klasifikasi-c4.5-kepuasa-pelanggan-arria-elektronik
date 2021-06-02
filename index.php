@@ -40,9 +40,6 @@ $result = mysqli_query($mysqli, "SELECT * FROM kepuasan_konsumen ORDER BY id ASC
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="index.php">Dataset</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="core/kmeans.php">Hasil Klastering</a>
-        </li>
       </ul>
     </div>
   </div>
