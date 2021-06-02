@@ -27,7 +27,7 @@ function hapus_tertinggi($instance){
     unset($instance[$tmp]);
     return $instance;
 }
-function hitung_lesser($all_data, $values, $atribut){
+function hitung_lesser($all_data, $values, $atribut, $filter_attrib = '', $filter_idx = 0, $operator =''){
     $temp = [
         'puas' => 0,
         'tidak' => 0,
@@ -35,18 +35,43 @@ function hitung_lesser($all_data, $values, $atribut){
         'entropi' => 0,
     ];
     foreach ($all_data as $key => $value) {
-        if($value[$atribut] <= $values and $value['hasil'] == 'puas'){
-            $temp['puas'] += 1;
-            $temp['total'] += 1;
+        if($filter_attrib === '' and $filter_idx === 0 and $operator === ''){
+            if($value[$atribut] <= $values and $value['hasil'] == 'puas'){
+                $temp['puas'] += 1;
+                $temp['total'] += 1;
+            }
+            else if($value[$atribut] <= $values and $value['hasil'] == 'tidak'){
+                $temp['tidak'] += 1;
+                $temp['total'] += 1;
+            }
         }
-        else if($value[$atribut] <= $values and $value['hasil'] == 'tidak'){
-            $temp['tidak'] += 1;
-            $temp['total'] += 1;
+        else{
+            // filter manual
+            if($operator == 'lesser'){
+                if($value[$atribut] <= $values and $value['hasil'] == 'puas' and $value[$filter_attrib] <= $filter_idx){
+                    $temp['puas'] += 1;
+                    $temp['total'] += 1;
+                }
+                else if($value[$atribut] <= $values and $value['hasil'] == 'tidak' and $value[$filter_attrib] <= $filter_idx){
+                    $temp['tidak'] += 1;
+                    $temp['total'] += 1;
+                }
+            }
+            else if($operator == 'greater'){
+                if($value[$atribut] <= $values and $value['hasil'] == 'puas' and $value[$filter_attrib] > $filter_idx){
+                    $temp['puas'] += 1;
+                    $temp['total'] += 1;
+                }
+                else if($value[$atribut] <= $values and $value['hasil'] == 'tidak' and $value[$filter_attrib] > $filter_idx){
+                    $temp['tidak'] += 1;
+                    $temp['total'] += 1;
+                }
+            }
         }
     }
     return $temp;
 }
-function hitung_greater($all_data, $values, $atribut){
+function hitung_greater($all_data, $values, $atribut, $filter_attrib = '', $filter_idx = 0, $operator = ''){
     $temp = [
         'puas' => 0,
         'tidak' => 0,
@@ -54,18 +79,43 @@ function hitung_greater($all_data, $values, $atribut){
         'entropi' => 0,
     ];
     foreach ($all_data as $key => $value) {
-        if($value[$atribut] > $values and $value['hasil'] == 'puas'){
-            $temp['puas'] += 1;
-            $temp['total'] += 1;
+        if($filter_attrib === '' and $filter_idx === 0 and $operator === ''){
+            if($value[$atribut] > $values and $value['hasil'] == 'puas'){
+                $temp['puas'] += 1;
+                $temp['total'] += 1;
+            }
+            else if($value[$atribut] > $values and $value['hasil'] == 'tidak'){
+                $temp['tidak'] += 1;
+                $temp['total'] += 1;
+            }
         }
-        else if($value[$atribut] > $values and $value['hasil'] == 'tidak'){
-            $temp['tidak'] += 1;
-            $temp['total'] += 1;
+        else{
+            // filter manual
+            if($operator == 'lesser'){
+                if($value[$atribut] > $values and $value['hasil'] == 'puas' and $value[$filter_attrib] <= $filter_idx){
+                    $temp['puas'] += 1;
+                    $temp['total'] += 1;
+                }
+                else if($value[$atribut] > $values and $value['hasil'] == 'tidak' and $value[$filter_attrib] <= $filter_idx){
+                    $temp['tidak'] += 1;
+                    $temp['total'] += 1;
+                }
+            }
+            else if($operator == 'greater'){
+                if($value[$atribut] > $values and $value['hasil'] == 'puas' and $value[$filter_attrib] > $filter_idx){
+                    $temp['puas'] += 1;
+                    $temp['total'] += 1;
+                }
+                else if($value[$atribut] > $values and $value['hasil'] == 'tidak' and $value[$filter_attrib] > $filter_idx){
+                    $temp['tidak'] += 1;
+                    $temp['total'] += 1;
+                }
+            }
         }
     }
     return $temp;
 }
-function mapping_atribut($result,$atribut){
+function mapping_atribut($result,$atribut,$filter_attrib='',$filter_idx=0,$operator =''){
     $map = [];
     $split = [
         'lesser' => 0,
@@ -75,15 +125,45 @@ function mapping_atribut($result,$atribut){
         'split_info' => 0,
         'gain_ratio' => 0,
     ];
-    foreach ($result as $key => $value) {
-        if(!key_exists($value[$atribut], $map)){
-            $map[$value[$atribut]] = $split;
+    if($filter_attrib === '' and $filter_idx === 0 and $operator === ''){
+        foreach ($result as $key => $value) {
+            if(!key_exists($value[$atribut], $map)){
+                $map[$value[$atribut]] = $split;
+            }
+        }
+        foreach ($map as $key => $value) {
+            $map[$key]['lesser'] = hitung_lesser($result, $key, $atribut);
+            $map[$key]['greater'] = hitung_greater($result, $key, $atribut);
+            $map[$key]['total_case'] = hitung_lesser($result, $key, $atribut)['total']+hitung_greater($result, $key, $atribut)['total'];
         }
     }
-    foreach ($map as $key => $value) {
-        $map[$key]['lesser'] = hitung_lesser($result, $key, $atribut);
-        $map[$key]['greater'] = hitung_greater($result, $key, $atribut);
-        $map[$key]['total_case'] = hitung_lesser($result, $key, $atribut)['total']+hitung_greater($result, $key, $atribut)['total'];
+    else{
+        if($operator == 'lesser'){
+            foreach ($result as $key => $value) {
+                // filter manual lesser
+                if(!key_exists($value[$atribut], $map) and $value[$filter_attrib] <= $filter_idx){
+                    $map[$value[$atribut]] = $split;
+                }
+            }
+            foreach ($map as $key => $value) {
+                $map[$key]['lesser'] = hitung_lesser($result, $key, $atribut, $filter_attrib, $filter_idx, $operator);
+                $map[$key]['greater'] = hitung_greater($result, $key, $atribut, $filter_attrib, $filter_idx, $operator);
+                $map[$key]['total_case'] = hitung_lesser($result, $key, $atribut, $filter_attrib, $filter_idx, $operator)['total']+hitung_greater($result, $key, $atribut, $filter_attrib, $filter_idx, $operator)['total'];
+            }
+        }
+        else if($operator == 'greater'){
+            foreach ($result as $key => $value) {
+                // filter manual greater
+                if(!key_exists($value[$atribut], $map) and $value[$filter_attrib] > $filter_idx){
+                    $map[$value[$atribut]] = $split;
+                }
+            }
+            foreach ($map as $key => $value) {
+                $map[$key]['lesser'] = hitung_lesser($result, $key, $atribut, $filter_attrib, $filter_idx, $operator);
+                $map[$key]['greater'] = hitung_greater($result, $key, $atribut, $filter_attrib, $filter_idx, $operator);
+                $map[$key]['total_case'] = hitung_lesser($result, $key, $atribut, $filter_attrib, $filter_idx, $operator)['total']+hitung_greater($result, $key, $atribut, $filter_attrib, $filter_idx, $operator)['total'];
+            }
+        }
     }
     return hapus_tertinggi($map);
 }
